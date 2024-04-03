@@ -1,0 +1,112 @@
+{{ block "index" . }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+  </head>
+
+  <body id="body" class="bg-gray-100 flex justify-center items-center h-screen">
+    {{ template "index-page" . }}
+  </body>
+</html>
+{{ end }} 
+
+{{ block "index-page" . }}
+<div id="index-card" class="card bg-white rounded-lg shadow-md p-8 max-w-md w-full">
+  <h2 class="text-2xl font-bold mb-6 text-center">Oude Markt Bar Picker</h2>
+  <div
+    class="h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground flex space-x-1.5"
+  >
+    <!-- Create Vote Tab -->
+    <button
+      id="createVoteTab"
+      hx-get="/partial/create-vote-content"
+      hx-target="#card-content"
+      hx-swap="innerHTML"
+      class="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+    >
+      Create Vote
+    </button>
+    <!-- Join Vote Tab -->
+    <button
+      id="joinVoteTab"
+      hx-get="/partial/join-vote-content"
+      hx-target="#card-content"
+      hx-swap="innerHTML"
+      class="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+    >
+      Join Vote
+    </button>
+  </div>
+  <div id="card-content" class="mt-4">
+    {{template "create-vote-content" . }}
+  </div>
+</div>
+{{ end }} 
+
+{{ block "create-vote-content" . }}
+<form>
+  <div class="mb-4">
+    <label for="name" class="block text-sm font-medium text-gray-700"
+      >Name</label
+    >
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    />
+  </div>
+  <button
+    type="submit"
+    hx-post="/vote"
+    hx-target="#index-card"
+    hx-swap="outerHTML"
+    hx-push-url="true"
+    class="btn-create-vote w-full text-white bg-black h-10 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+  >
+    Create Vote
+  </button>
+</form>
+{{ end }} 
+
+{{ block "join-vote-content" . }}
+<form>
+  <div class="mb-4">
+    <label for="name" class="block text-sm font-medium text-gray-700"
+      >Name</label
+    >
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    />
+  </div>
+  <div class="mb-4">
+    <label for="voteCode" class="block text-sm font-medium text-gray-700"
+      >Vote code</label
+    >
+    <input
+      type="text"
+      id="voteCode"
+      name="voteCode"
+      class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    />
+  </div>
+  <button
+    type="submit"
+    hx-post="/vote/join"
+    hx-target="#index-card"
+    hx-swap="outerHTML"
+    hx-push-url="true"
+    class="btn-join-vote w-full text-white bg-black h-10 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+  >
+    Join Vote
+  </button>
+</form>
+{{ end }}
