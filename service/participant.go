@@ -76,6 +76,11 @@ func (service ParticipantService) GetAllVotedParticipants(voteCode string) ([]mo
 	return repo.FindAllForVoteWhereBarNotNull(voteCode)
 }
 
+func (service ParticipantService) GetAllParticipantsForVote(voteCode string) ([]model.Participant, error) {
+	repo := service.getRepository()
+	return repo.FindAllForVote(voteCode)
+}
+
 func (service ParticipantService) GetVoteStats(votedPs []model.Participant) model.VoteStatsDTO {
 	statsMap := make(map[uint]*model.VoteStatsRow)
 	rows := []model.VoteStatsRow{}

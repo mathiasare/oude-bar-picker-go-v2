@@ -1,15 +1,16 @@
 package main
 
-// Simple web wsserver
 import (
 	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/joho/godotenv"
 
 	// Import the routes package
 	database "oude-bar-picker-v2/db"
+	"oude-bar-picker-v2/lib"
 	"oude-bar-picker-v2/repository"
 	router "oude-bar-picker-v2/router"
 	api "oude-bar-picker-v2/router/api"
@@ -18,13 +19,19 @@ import (
 )
 
 func main() {
+	// Load environment variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Printf("Error loading environment variables: %s", err)
+	}
+
 	r := chi.NewRouter()
 
 	// Middleware
 	r.Use(middleware.Logger)
 
 	// Websockets
-	ws := service.NewWsServer()
+	ws := lib.NewWsServer()
 
 	// Initialize db
 	db := database.Connect()
@@ -42,7 +49,7 @@ func main() {
 
 	// Setup static file serving
 	fileServer := http.FileServer(http.Dir("./resource/static/"))
-	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
+	r.Handle("/resource/static/*", http.StripPrefix("/resource/static/", fileServer))
 
 	// UI route handlers
 	r.Mount("/", ui.HandleIndexPage())

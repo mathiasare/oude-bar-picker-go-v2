@@ -27,6 +27,11 @@ func (service VoteService) GetById(voteCode string) (model.Vote, error) {
 	return repo.FindById(voteCode)
 }
 
+func (service VoteService) GetDeletedById(voteCode string) (model.Vote, error) {
+	repo := service.getRepository()
+	return repo.FindDeletedById(voteCode)
+}
+
 func (service VoteService) Create(vote model.Vote) (model.Vote, error) {
 	repo := service.getRepository()
 	voteCode := generateVoteCode()
@@ -60,26 +65,43 @@ func (service VoteService) AddUserToVote(voteCode string, name string) error {
 	return nil
 }
 
-func (service VoteService) EndVote(voteCode string, name string) (model.VoteStatsDTO, error) {
-	pService := service.PService
+func (service VoteService) EndVote(voteCode string, name string) (string, error) {
 	repo := service.getRepository()
-	votedPs, err := pService.GetAllVotedParticipants(voteCode)
+	stats, err := service.GetVoteStats(voteCode)
+	if err != nil {
+		return "", err
+	}
+
+	if len(stats) == 0 {
+		return service.Delete(voteCode)
+	}
+
+	repo.AddWinnerToVote(voteCode, stats[0].BarId)
+	return service.Delete(voteCode)
+}
+
+func (service VoteService) GetVoteStats(voteCode string) (model.VoteStatsDTO, error) {
+	pService := service.PService
+
+	votedPs, err := pService.GetAllParticipantsForVote(voteCode)
 	if err != nil {
 		return nil, err
 	}
 
-	stats := pService.GetVoteStats(votedPs)
-	if len(stats) == 0 {
-		_, err := repo.DeleteById(voteCode)
-		if err != nil {
-			return nil, err
-		}
-		return stats, nil
+	return pService.GetVoteStats(votedPs), nil
+}
+
+func (service VoteService) VoteForBar(participantId uint, barId uint) ([]model.VoteStatsRow, error) {
+	pService := service.PService
+	p := &model.Participant{}
+	p.ID = participantId
+
+	votePs, err := pService.VoteForBar(p, barId)
+	if err != nil {
+		return nil, err
 	}
 
-	repo.AddWinnerToVote(voteCode, stats[0].BarId)
-
-	return stats, nil
+	return pService.GetVoteStats(votePs), nil
 }
 
 func generateVoteCode() string {

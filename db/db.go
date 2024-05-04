@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"os"
 	"oude-bar-picker-v2/model"
 
 	libsql "github.com/renxzen/gorm-libsql"
@@ -9,7 +10,8 @@ import (
 )
 
 func Connect() *gorm.DB {
-	db, err := gorm.Open(libsql.Open("libsql://oude-picker-mathiasare.turso.io?authToken=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3MTA3OTgzOTEsImlkIjoiZTVmZGI3MzctYzJlYy0xMWVlLWIwNzEtNTIwNTNjNGIyM2E2In0.nLQd23Cua7IC2tfUyWFg3l1APm5BTZMzguF_tAJGupRsB4tlKuvw5_n2aiCPcP2kGQ51hhW3nG0tFBo3Ag4TAQ"), &gorm.Config{})
+	dbUrl := os.Getenv("DB_URL")
+	db, err := gorm.Open(libsql.Open(dbUrl), &gorm.Config{})
 
 	if err != nil {
 		panic("failed to connect database")

@@ -27,6 +27,19 @@ func (repo ParticipantRepository) FindAll() ([]model.Participant, error) {
 	return participants, nil
 }
 
+func (repo ParticipantRepository) FindAllForVote(voteCode string) ([]model.Participant, error) {
+	db := repo.getDB()
+	var participants []model.Participant
+	result := db.Preload("Bar").Where("vote_id = ?", voteCode).Find(&participants)
+
+	err := result.Error
+	if err != nil {
+		return nil, err
+	}
+
+	return participants, nil
+}
+
 func (repo ParticipantRepository) FindAllForVoteWhereBarNotNull(voteCode string) ([]model.Participant, error) {
 	db := repo.getDB()
 	var participants []model.Participant

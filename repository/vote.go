@@ -30,7 +30,20 @@ func (repo VoteRepository) FindAll() ([]model.Vote, error) {
 func (repo VoteRepository) FindById(id string) (model.Vote, error) {
 	db := repo.getDB()
 	var vote model.Vote
-	result := db.First(&vote, "id = ?", id)
+	result := db.Preload("Participants").First(&vote, "id = ?", id)
+
+	err := result.Error
+	if err != nil {
+		return model.Vote{}, err
+	}
+
+	return vote, nil
+}
+
+func (repo VoteRepository) FindDeletedById(id string) (model.Vote, error) {
+	db := repo.getDB()
+	var vote model.Vote
+	result := db.Unscoped().First(&vote, "id = ?", id)
 
 	err := result.Error
 	if err != nil {

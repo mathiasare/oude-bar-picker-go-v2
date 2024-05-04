@@ -19,12 +19,19 @@ import (
 	"nhooyr.io/websocket"
 )
 
-func HandleWebsocketRoutes(ws *service.WsServer, voteService service.VoteService) *chi.Mux {
+func HandleWebsocketRoutes(ws *lib.WsServer, voteService service.VoteService) *chi.Mux {
 	r := chi.NewRouter()
 	templates := lib.NewTemplate()
 
 	r.Post("/subscribe/{voteCode}", func(w http.ResponseWriter, r *http.Request) {
 		voteCode := chi.URLParam(r, "voteCode")
+
+		// Validate that vote code exists
+		if voteCode == "" {
+			http.Error(w, "Vote code missing!", http.StatusBadRequest)
+			return
+		}
+
 		err := ws.Subscribe(r.Context(), w, r, voteCode)
 		if errors.Is(err, context.Canceled) {
 			return
@@ -41,6 +48,13 @@ func HandleWebsocketRoutes(ws *service.WsServer, voteService service.VoteService
 
 	r.Get("/subscribe/{voteCode}", func(w http.ResponseWriter, r *http.Request) {
 		voteCode := chi.URLParam(r, "voteCode")
+
+		// Validate that vote code exists
+		if voteCode == "" {
+			http.Error(w, "Vote code missing!", http.StatusBadRequest)
+			return
+		}
+
 		err := ws.Subscribe(r.Context(), w, r, voteCode)
 		if errors.Is(err, context.Canceled) {
 			return
@@ -57,6 +71,13 @@ func HandleWebsocketRoutes(ws *service.WsServer, voteService service.VoteService
 
 	r.Post("/publish/{voteCode}", func(w http.ResponseWriter, r *http.Request) {
 		voteCode := chi.URLParam(r, "voteCode")
+
+		// Validate that vote code exists
+		if voteCode == "" {
+			http.Error(w, "Vote code missing!", http.StatusBadRequest)
+			return
+		}
+
 		var vDTO model.VoteDTO
 
 		dtoBytes, err := io.ReadAll(r.Body)
@@ -87,9 +108,7 @@ func HandleWebsocketRoutes(ws *service.WsServer, voteService service.VoteService
 			return
 		}
 
-		p := &model.Participant{}
-		p.ID = uint(pId)
-		votePs, err := voteService.PService.VoteForBar(p, uint(barId))
+		statsData, err := voteService.VoteForBar(uint(pId), uint(barId))
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				http.Error(w, "User not registered to vote!", http.StatusForbidden)
@@ -99,7 +118,6 @@ func HandleWebsocketRoutes(ws *service.WsServer, voteService service.VoteService
 			return
 		}
 
-		statsData := voteService.PService.GetVoteStats(votePs)
 		temp := templates.Templates.Lookup("stats-row")
 
 		var buf bytes.Buffer
@@ -115,5 +133,38 @@ func HandleWebsocketRoutes(ws *service.WsServer, voteService service.VoteService
 		ws.Publish(voteCode, buf.Bytes())
 		w.WriteHeader(http.StatusAccepted)
 	})
+
+	r.Post("/subscribed/{voteCode}", func(w http.ResponseWriter, r *http.Request) {
+		voteCode := chi.URLParam(r, "voteCode")
+
+		// Validate that vote code exists
+		if voteCode == "" {
+			http.Error(w, "Vote code missing!", http.StatusBadRequest)
+			return
+		}
+
+		votePs, err := voteService.PService.GetAllParticipantsForVote(voteCode)
+		if err != nil {
+			http.Error(w, "Failed to write websocket response!", http.StatusInternalServerError)
+			return
+		}
+
+		temp := templates.Templates.Lookup("p-row")
+
+		var buf bytes.Buffer
+		writer := bufio.NewWriter(&buf)
+		temp.Execute(writer, votePs)
+
+		err = writer.Flush()
+		if err != nil {
+			http.Error(w, "Failed to write websocket response!", http.StatusInternalServerError)
+			return
+		}
+
+		ws.Publish(voteCode, buf.Bytes())
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
 	return r
 }

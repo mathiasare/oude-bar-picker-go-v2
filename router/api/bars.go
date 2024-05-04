@@ -3,6 +3,7 @@ package routes
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"oude-bar-picker-v2/service"
 	"strconv"
@@ -22,21 +23,22 @@ func HandleApiBarRoutes(service service.BarService) *chi.Mux {
 			return
 		}
 
-		jsonFormat, err := json.Marshal(bars)
+		barsJson, err := json.Marshal(bars)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		w.WriteHeader(200)
-		w.Write(jsonFormat)
+		w.WriteHeader(http.StatusOK)
+		w.Write(barsJson)
 	})
 
 	// Get bar by ID
 	r.Get("/{barId}", func(w http.ResponseWriter, r *http.Request) {
 		barIdStr := chi.URLParam(r, "barId")
 		barId, err := strconv.Atoi(barIdStr)
+
 		if err != nil {
 			http.Error(w, "Invalid bar id!", http.StatusBadRequest)
 			return
@@ -45,8 +47,7 @@ func HandleApiBarRoutes(service service.BarService) *chi.Mux {
 		bar, err := service.GetById(uint(barId))
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				w.WriteHeader(404)
-				w.Write([]byte("Bar not found!"))
+				http.Error(w, "Bar not found!", http.StatusNotFound)
 				return
 			}
 
@@ -54,44 +55,44 @@ func HandleApiBarRoutes(service service.BarService) *chi.Mux {
 			return
 		}
 
-		jsonFormat, err := json.Marshal(bar)
+		barJson, err := json.Marshal(bar)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		w.WriteHeader(200)
-		w.Write(jsonFormat)
+		w.WriteHeader(http.StatusOK)
+		w.Write(barJson)
 	})
 
 	// Create bar
 	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 		res, err := service.Create(r.Body)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		w.WriteHeader(201)
+		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(strconv.Itoa(int(res.ID))))
-	})
-
-	// Update bar
-	r.Put("/", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(500)
-		w.Write([]byte("TODO!"))
 	})
 
 	// Delete bar
 	r.Delete("/{barId}", func(w http.ResponseWriter, r *http.Request) {
 		barId := chi.URLParam(r, "barId")
 		resultId, err := service.Delete(barId)
+
 		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				http.Error(w, "Bar not found!", http.StatusNotFound)
+				return
+			}
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(resultId))
 	})
 

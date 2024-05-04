@@ -1,9 +1,44 @@
 [
-    { "name": "Barvista", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "A nice bar where to hangout", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" },
-    { "name": "Ambrorix", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" },
-    { "name": "Cafe Manger", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" },
-    { "name": "Weerelt", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" },
-    { "name": "Rustic", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" },
-    { "name": "Bierkelter", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" },
-    { "name": "Cafe Allee", "locationUrl": "https://maps.app.goo.gl/WKPDfmubWDeycBRcA", "description": "", "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg" }
+    {
+        "name": "Barvista",
+        "locationUrl": "https://maps.app.goo.gl/efVvJ36Ju6MJzV92A",
+        "description": "Cocktail bar & dance café in the heart of Leuven",
+        "imageUrl": "https://barvista.be/images/gallery/thumbs/1.jpg"
+    },
+    {
+        "name": "Ambrorix",
+        "locationUrl": "https://maps.app.goo.gl/82JVQxJuwo9J9bCU9",
+        "description": "",
+        "imageUrl": "https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/266368918_4745359628885544_2666880794382150357_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Sh_C9yHaInkAb5G-zKx&_nc_ht=scontent-bru2-1.xx&oh=00_AfCoNmyQgjYeWkPAHfUXOsL7uMr2EK37_UStfy_4gb_Dvw&oe=6628783B"
+    },
+    {
+        "name": "Café Manger",
+        "locationUrl": "https://maps.app.goo.gl/AiiPKkFNv5Y2kads9",
+        "description": "",
+        "imageUrl": "https://images.happycow.net/venues/1024/12/51/hcmp125108_439899.jpeg"
+    },
+    {
+        "name": "De Weerelt",
+        "locationUrl": "https://maps.app.goo.gl/Hr1tj5WhQrYEKkb89",
+        "description": "",
+        "imageUrl": "https://images0.persgroep.net/rcs/L8ENBKJMihCog98CD5XnT342wN4/diocontent/227647239/_fitwidth/694/?appId=21791a8992982cd8da851550a453bd7f&quality=0.8&desiredformat=webp"
+    },
+    {
+        "name": "Bar Rustic",
+        "locationUrl": "https://maps.app.goo.gl/MC4QQ3BvzHTNZxN2A",
+        "description": "",
+        "imageUrl": "https://scontent-bru2-1.xx.fbcdn.net/v/t1.6435-9/190337783_906047373294056_5967961558835520369_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Fy6qz6p7n5MAb5twfgh&_nc_ht=scontent-bru2-1.xx&oh=00_AfBoEAi61bEJmObyMG0l3O2rqLlRXQh_296UbXltb2i6Fw&oe=664A02E7"
+    },
+    {
+        "name": "De Bierkelter",
+        "locationUrl": "https://maps.app.goo.gl/kdmQM3H13rQTqQew9",
+        "description": "",
+        "imageUrl": "https://media-cdn.tripadvisor.com/media/photo-s/0d/e6/e5/ef/20161216-141132-largejpg.jpg"
+    },
+    {
+        "name": "Café Allee",
+        "locationUrl": "https://maps.app.goo.gl/zRe7LUJe733UEM5u7",
+        "description": "",
+        "imageUrl": "https://images0.persgroep.net/rcs/SXLy5PJs0zCF-KNYLGswYbFi2a0/diocontent/201166011/_fill/1295/900/?appId=21791a8992982cd8da851550a453bd7f&quality=0.9"
+    }
 ]

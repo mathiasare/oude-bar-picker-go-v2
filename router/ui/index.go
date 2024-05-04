@@ -11,6 +11,8 @@ import (
 func HandleIndexPage() *chi.Mux {
 	r := chi.NewRouter()
 	templates := lib.NewTemplate()
+
+	// Index page
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		templates.Templates.ExecuteTemplate(w, "index", nil)
 	})
