@@ -24,7 +24,20 @@ Deployable as a Docker container
 
 ### Running the app
 
-In project root Run: 
+1. Create and run a new libSQL database either
+locally or using [Turso](https://turso.tech/).
+
+2. Create a .env file and add the following line:
+```
+DB_URL=<URL to your database including auth token if exists>
+```
+Example:
+
+```
+DB_URL=libsql://oude-picker-db.turso.io?authToken=12345>
+```
+
+3. In project root Run: 
 ```bash 
 go run main.go
 ```
