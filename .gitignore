@@ -1,2 +1,37 @@
-tmp/
+# Binaries
+*.exe
+*.test
+
+# Dependency management (choose one)
+# Vendor (Go 1.5 and below)
+vendor/
+
+# Go module cache (Go 1.11 and above)
+# Comment out if you prefer vendor
+*/go.mod
+*/go.sum
+
+# IDE/editor specific files
+# Adjust based on your IDE
+.idea/
+.vscode/
+
+# OS specific hidden files
+.DS_Store # macOS
+
+# Testing output
+*.out
+
+# Coverage reports
+coverage.txt
+
+# Logs
+*.log
+
+# Temporary files
+.tmp/
+
+# Credentials (add more patterns as needed)
 .env
+*.crt
+*.key
