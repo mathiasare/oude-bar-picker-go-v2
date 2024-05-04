@@ -30,8 +30,10 @@ coverage.txt
 
 # Temporary files
 .tmp/
+.tmp/*
 
 # Credentials (add more patterns as needed)
 .env
 *.crt
 *.key
+tmp/main
